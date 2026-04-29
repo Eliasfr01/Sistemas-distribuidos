@@ -1,0 +1,1 @@
+Sistema de Gerenciamento de Campeonatos de Futsal Este projeto consiste em um sistema distribuído para a gestão e consulta de campeonatos de futsal, desenvolvido para a disciplina de Sistemas Distribuídos. A aplicação permite a organização de times, atletas, arbitragem e a consulta em tempo real de placares.
