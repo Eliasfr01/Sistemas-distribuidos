@@ -1,6 +1,7 @@
 package br.ufc.futsal;
 
 import br.ufc.futsal.model.Atleta;
+import br.ufc.futsal.service.AtletaInputStream;
 import br.ufc.futsal.service.AtletaOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,24 +29,58 @@ public class TesteEnvio {
             System.out.println("Arquivo 'atletas.txt' criado com sucesso!");
 
             // --- TESTE iii: Servidor Remoto (TCP) ---
-            System.out.println("\n=== TESTE 3: TCP (SIMULADO) ===");
+            System.out.println("\n=== TESTE 3: TCP (COMUNICAÇÃO REAL) ===");
 
-            // Este try especial abre o "servidor" e o "cliente" e os fecha automaticamente no final
             try (java.net.ServerSocket servidorFake = new java.net.ServerSocket(5000);
                  java.net.Socket socketCliente = new java.net.Socket("localhost", 5000)) {
 
-                // O servidor aceita a conexão do cliente
+                // 1. O servidor aceita a conexão
                 java.net.Socket conexaoNoServidor = servidorFake.accept();
 
-                // Usamos seu AtletaOutputStream para enviar pelo cano da rede
+                // 2. LADO DO CLIENTE: Envia os dados
                 AtletaOutputStream aosRede = new AtletaOutputStream(lista, 2, socketCliente.getOutputStream());
                 aosRede.enviarDados();
+                System.out.println("Cliente: Enviei os atletas via rede...");
 
-                System.out.println("Dados enviados via TCP com sucesso para a porta 5000!");
+                // 3. LADO DO SERVIDOR: Recebe e reconstrói na hora!
+                // Note que usamos 'conexaoNoServidor.getInputStream()'
+                AtletaInputStream aisRede = new AtletaInputStream(conexaoNoServidor.getInputStream());
+
+                System.out.println("Servidor: Recebi e estou reconstruindo...");
+                for (int i = 0; i < 2; i++) {
+                    Atleta recebido = aisRede.lerAtleta();
+                    System.out.println("Servidor recuperou: " + recebido.getNome() + " (" + recebido.getPosicao() + ")");
+                }
+
+                System.out.println("Comunicação TCP finalizada com sucesso!");
             }
 
         } catch (IOException e) {
             System.err.println("Ops, deu erro na manipulação dos dados: " + e.getMessage());
+        }
+        System.out.println("\n=== TESTE 4: LEITURA DE ARQUIVO ===");
+
+        // Abrimos o arquivo para leitura (FileInputStream)
+        try (java.io.FileInputStream fis = new java.io.FileInputStream("atletas.txt")) {
+
+            // Criamos o nosso "leitor" personalizado
+            AtletaInputStream ais = new AtletaInputStream(fis);
+
+            System.out.println("Lendo dados do arquivo e reconstruindo objetos...");
+
+            // Vamos tentar ler os 2 atletas que sabemos que estão lá
+            for (int i = 0; i < 2; i++) {
+                Atleta recuperado = ais.lerAtleta();
+                if (recuperado != null) {
+                    System.out.println("Objeto reconstruído com sucesso!");
+                    System.out.println("Nome: " + recuperado.getNome());
+                    System.out.println("Número: " + recuperado.getNumeroCamisa());
+                    System.out.println("Posição: " + recuperado.getPosicao());
+                    System.out.println("----------------------------");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao ler o arquivo: " + e.getMessage());
         }
         }
 }

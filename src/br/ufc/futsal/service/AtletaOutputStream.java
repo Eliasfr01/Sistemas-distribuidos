@@ -26,7 +26,6 @@ public class AtletaOutputStream extends OutputStream {
 
             this.destino.write(buffer.length);
             this.destino.write(buffer);
-            this.destino.write('\n');
         }
     }
 
