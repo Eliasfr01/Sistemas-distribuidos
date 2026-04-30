@@ -19,22 +19,21 @@ public class AtletaInputStream extends InputStream {
 
     public Atleta lerAtleta() throws IOException {
         int tamanho = origem.read();
-
-        if (tamanho == -1) {
-            return null; // Fim do stream
-        }
+        if (tamanho == -1) return null;
 
         byte[] buffer = new byte[tamanho];
         origem.read(buffer);
 
-        String linha  = new String(buffer);
-
+        String linha = new String(buffer).trim();
         String[] partes = linha.split(",");
 
-        String nome = partes[0];
-        int numero  = Integer.parseInt(partes[1]);
-        String posicao  = partes[2];
-
-        return new Atleta(nome, numero, posicao);
+        if (partes.length >= 3) {
+            String nome = partes[0];
+            int numero = Integer.parseInt(partes[1]);
+            String posicao = partes[2];
+            
+            return new Atleta(nome, numero, posicao); 
+        }
+        return null; 
     }
 }

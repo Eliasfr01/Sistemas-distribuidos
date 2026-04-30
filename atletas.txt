@@ -1,2 +1,1 @@
-Falcao,12,Ala
-Ricardinho,10,Fixo
+Falcao,12,AlaRicardinho,10,Fixo

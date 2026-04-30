@@ -20,7 +20,7 @@ public class AtletaOutputStream extends OutputStream {
         for  (int i = 0; i < quantidade; i++) {
             Atleta a =  listaAtletas[i];
 
-            String dados = a.getNome() + "," + a.getNumeroCamisa() + "," + a.getPosicao() + "\n";
+            String dados = a.getNome() + "," + a.getNumeroCamisa() + "," + a.getPosicao();
 
             byte[] buffer = dados.getBytes();
 
