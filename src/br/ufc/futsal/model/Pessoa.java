@@ -1,6 +1,8 @@
 package br.ufc.futsal.model;
 
-public class Pessoa {
+import java.io.Serializable;
+
+public class Pessoa implements Serializable {
     private String nome;
 
     public Pessoa(String nome) {

@@ -1,6 +1,8 @@
 package br.ufc.futsal.model;
 
-public class Atleta extends Pessoa{
+import java.io.Serializable;
+
+public class Atleta extends Pessoa implements Serializable{
     private int numeroCamisa;
     private String posicao;
 

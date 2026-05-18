@@ -1,6 +1,8 @@
 package br.ufc.futsal.model;
 
-public class Time {
+import java.io.Serializable;
+
+public class Time implements Serializable {
     private String nome;
     private String cidade;
 

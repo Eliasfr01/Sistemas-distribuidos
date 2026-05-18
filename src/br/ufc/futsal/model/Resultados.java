@@ -1,6 +1,8 @@
 package br.ufc.futsal.model;
 
-public class Resultados {
+import java.io.Serializable;
+
+public class Resultados implements Serializable {
     private Time timeA;
     private Time timeB;
     private int golsA;

@@ -1,6 +1,8 @@
 package br.ufc.futsal.model;
 
-public class Arbitro extends Pessoa {
+import java.io.Serializable;
+
+public class Arbitro extends Pessoa implements Serializable {
     private String categoria;
 
     public Arbitro(String nome, String categoria) {
