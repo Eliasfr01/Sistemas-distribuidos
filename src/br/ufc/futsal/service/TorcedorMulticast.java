@@ -1,29 +1,32 @@
 package br.ufc.futsal.service;
 
-import java.net.*;
+import br.ufc.futsal.rmi.RemoteListener;
+import br.ufc.futsal.rmi.RemoteListener;
+import br.ufc.futsal.rmi.FutsalServiceRemote;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
-public class TorcedorMulticast implements Runnable {
+public class TorcedorMulticast extends UnicastRemoteObject implements Runnable, RemoteListener {
+    public TorcedorMulticast() throws Exception { super(); }
+
     @Override
     public void run() {
         try {
-            MulticastSocket socket = new MulticastSocket(4321);
-            InetAddress grupo = InetAddress.getByName("230.0.0.1");
-            NetworkInterface rede = NetworkInterface.getByInetAddress(InetAddress.getByName("localhost"));
+            Registry reg = LocateRegistry.getRegistry("localhost", 1099);
+            FutsalServiceRemote serv = (FutsalServiceRemote) reg.lookup("FutsalService");
+            serv.registerListener(this);
+            System.out.println("[INFO] Registrado como listener RMI da liga Futsal...");
 
-            // Entra no grupo de multicast
-            socket.joinGroup(new InetSocketAddress(grupo, 4321), rede);
-            System.out.println("[INFO] Ouvindo notícias da liga Futsal...");
-
-            while (true) {
-                byte[] buffer = new byte[256];
-                DatagramPacket pacote = new DatagramPacket(buffer, buffer.length);
-                socket.receive(pacote); // Trava aqui até receber aviso
-
-                String aviso = new String(pacote.getData(), 0, pacote.getLength());
-                System.out.println("\n[AVISO DA LIGA]: " + aviso);
-            }
+            // fica vivo para receber callbacks
+            synchronized (this) { this.wait(); }
         } catch (Exception e) {
-            System.err.println("Erro no Multicast: " + e.getMessage());
+            System.err.println("Erro ao registrar listener RMI: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void notify(String message) {
+        System.out.println("\n[AVISO DA LIGA]: " + message);
     }
 }

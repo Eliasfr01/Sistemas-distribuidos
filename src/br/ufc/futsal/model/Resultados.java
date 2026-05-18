@@ -20,4 +20,9 @@ public class Resultados implements Serializable {
                 + timeA.getNome() + " " + golsA + " X "
                 + golsB + " " + timeA.getNome());
     }
+
+    public Time getTimeA() { return timeA; }
+    public Time getTimeB() { return timeB; }
+    public int getGolsA() { return golsA; }
+    public int getGolsB() { return golsB; }
 }

@@ -28,31 +28,17 @@ public class TesteEnvio {
             arquivo.close();
             System.out.println("Arquivo 'atletas.txt' criado com sucesso!");
 
-            // --- TESTE iii: Servidor Remoto (TCP) ---
-            System.out.println("\n=== TESTE 3: TCP (COMUNICAÇÃO REAL) ===");
-
-            try (java.net.ServerSocket servidorFake = new java.net.ServerSocket(5000);
-                 java.net.Socket socketCliente = new java.net.Socket("localhost", 5000)) {
-
-                // 1. O servidor aceita a conexão
-                java.net.Socket conexaoNoServidor = servidorFake.accept();
-
-                // 2. LADO DO CLIENTE: Envia os dados
-                AtletaOutputStream aosRede = new AtletaOutputStream(lista, 2, socketCliente.getOutputStream());
-                aosRede.enviarDados();
-                System.out.println("Cliente: Enviei os atletas via rede...");
-
-                // 3. LADO DO SERVIDOR: Recebe e reconstrói na hora!
-                // Note que usamos 'conexaoNoServidor.getInputStream()'
-                AtletaInputStream aisRede = new AtletaInputStream(conexaoNoServidor.getInputStream());
-
-                System.out.println("Servidor: Recebi e estou reconstruindo...");
-                for (int i = 0; i < 2; i++) {
-                    Atleta recebido = aisRede.lerAtleta();
-                    System.out.println("Servidor recuperou: " + recebido.getNome() + " (" + recebido.getPosicao() + ")");
+            // --- TESTE iii: Envio via RMI ---
+            System.out.println("\n=== TESTE 3: RMI (COMUNICAÇÃO REMOTA) ===");
+            try {
+                java.rmi.registry.Registry reg = java.rmi.registry.LocateRegistry.getRegistry("localhost", 1099);
+                br.ufc.futsal.rmi.FutsalServiceRemote serv = (br.ufc.futsal.rmi.FutsalServiceRemote) reg.lookup("FutsalService");
+                for (Atleta a : lista) {
+                    String res = serv.registerAtleta(a);
+                    System.out.println("Servidor RMI: " + res);
                 }
-
-                System.out.println("Comunicação TCP finalizada com sucesso!");
+            } catch (Exception e) {
+                System.err.println("Erro no teste RMI: " + e.getMessage());
             }
 
         } catch (IOException e) {

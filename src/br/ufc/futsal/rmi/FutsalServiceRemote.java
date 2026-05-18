@@ -13,4 +13,9 @@ public interface FutsalServiceRemote extends Remote {
     String registerTime(RemoteTime time) throws RemoteException;
     Resultados computeResult(Time timeA, Time timeB, int golsA, int golsB) throws RemoteException;
     Arbitro getArbitroInfo(String nome) throws RemoteException;
+
+    // Novas operações para substituir uso de sockets/multicast
+    void registerListener(RemoteListener listener) throws RemoteException;
+    void broadcast(String message) throws RemoteException;
+    void vote(String login, int candidato) throws RemoteException;
 }

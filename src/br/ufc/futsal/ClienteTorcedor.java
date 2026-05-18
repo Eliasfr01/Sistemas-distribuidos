@@ -7,26 +7,23 @@ import java.util.Scanner;
 
 public class ClienteTorcedor {
     public static void main(String[] args) {
-        // 1. Inicia a thread para ouvir avisos UDP (Multicast)
-        new Thread(new TorcedorMulticast()).start();
+        // 1. Inicia a thread para ouvir avisos via RMI
+        try {
+            TorcedorMulticast listener = new TorcedorMulticast();
+            new Thread(listener).start();
 
-        // 2. Conexão Unicast (TCP) para Votação
-        try (Socket socket = new Socket("localhost", 5000);
-             DataInputStream entrada = new DataInputStream(socket.getInputStream());
-             DataOutputStream saida = new DataOutputStream(socket.getOutputStream());
-             Scanner scanner = new Scanner(System.in)) {
-
-            // Processo de Login
-            System.out.println("Servidor: " + entrada.readUTF());
-            saida.writeUTF(scanner.nextLine());
-
-            // Processo de Votação
-            System.out.println("Servidor: " + entrada.readUTF());
-            saida.writeInt(scanner.nextInt());
-
-            System.out.println("Voto enviado! Aguarde o encerramento da liga.");
-
-        } catch (IOException e) {
+            // 2. Votação via RMI
+            java.rmi.registry.Registry reg = java.rmi.registry.LocateRegistry.getRegistry("localhost", 1099);
+            br.ufc.futsal.rmi.FutsalServiceRemote serv = (br.ufc.futsal.rmi.FutsalServiceRemote) reg.lookup("FutsalService");
+            try (java.util.Scanner scanner = new java.util.Scanner(System.in)) {
+                System.out.println("Digite seu login:");
+                String login = scanner.nextLine();
+                System.out.println("Vote no craque: 1-Falcao, 2-Ricardinho");
+                int voto = scanner.nextInt();
+                serv.vote(login, voto);
+                System.out.println("Voto enviado via RMI! Aguarde o encerramento da liga.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

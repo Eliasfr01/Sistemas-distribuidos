@@ -1,25 +1,16 @@
 package br.ufc.futsal.service;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import br.ufc.futsal.rmi.FutsalServiceRemote;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class AdministradorService {
     public static void enviarAviso(String mensagem) {
         try {
-            // No UDP usamos DatagramSocket
-            DatagramSocket socket = new DatagramSocket();
-
-            // Endereço de Multicast (IPs de 224.0.0.0 a 239.255.255.255)
-            InetAddress grupo = InetAddress.getByName("230.0.0.1");
-            byte[] buffer = mensagem.getBytes();
-
-            // Criamos o "pacote" com os dados, o tamanho, o IP do grupo e a porta
-            DatagramPacket pacote = new DatagramPacket(buffer, buffer.length, grupo, 4321);
-
-            socket.send(pacote);
-            System.out.println("Aviso enviado via Multicast: " + mensagem);
-            socket.close();
+            Registry reg = LocateRegistry.getRegistry("localhost", 1099);
+            FutsalServiceRemote serv = (FutsalServiceRemote) reg.lookup("FutsalService");
+            serv.broadcast(mensagem);
+            System.out.println("Aviso enviado via RMI: " + mensagem);
         } catch (Exception e) {
             e.printStackTrace();
         }
