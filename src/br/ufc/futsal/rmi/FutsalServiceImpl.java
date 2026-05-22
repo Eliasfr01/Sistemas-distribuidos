@@ -146,13 +146,6 @@ public class FutsalServiceImpl extends UnicastRemoteObject implements FutsalServ
         System.out.println("Voto recebido de " + login + ": Craque " + craque);
     }
 
-    /**
-     * Implementação do protocolo de requisição-resposta: doOperation.
-     * Este método demonstra um protocolo de aplicação explícito:
-     * - Cliente monta uma Mensagem com operação e argumentos em JSON
-     * - Servidor processa e retorna outra Mensagem com resultado em JSON
-     * - Dispatch baseado em referência de objeto e ID de método
-     */
     @Override
     public synchronized Mensagem doOperation(Mensagem request) throws RemoteException {
         // request.arguments contém a representação externa (JSON) dos argumentos
@@ -328,10 +321,6 @@ public class FutsalServiceImpl extends UnicastRemoteObject implements FutsalServ
         return sb.toString();
     }
 
-    /**
-     * Extrai um valor simples (string ou número) de uma estrutura JSON.
-     * Método naive, apenas para demonstração.
-     */
     private String extractJsonValue(String json, String key) {
         if (json == null) return null;
         String pat = "\""+key+"\"\s*:\s*";

@@ -2,11 +2,7 @@ package br.ufc.futsal.model;
 
 import java.io.Serializable;
 
-/**
- * Representa uma mensagem de requisição/resposta no protocolo RMI.
- * Encapsula: tipo (request/reply), ID, referência de objeto, ID do método e argumentos em JSON.
- * Essa estrutura demonstra um protocolo explícito de comunicação entre cliente e servidor.
- */
+
 public class Mensagem implements Serializable {
     private static final long serialVersionUID = 1L;
 
