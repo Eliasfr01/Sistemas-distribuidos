@@ -344,10 +344,6 @@ public class FutsalServiceImpl extends UnicastRemoteObject implements FutsalServ
         }
     }
 
-    /**
-     * Extrai um objeto JSON aninhado (ex: "timeA":{...}).
-     * Método naive, apenas para demonstração.
-     */
     private String extractJsonObject(String json, String key) {
         if (json == null) return null;
         int idx = json.indexOf('"'+key+'"');
