@@ -2,6 +2,10 @@ package br.ufc.futsal.model;
 
 import java.io.Serializable;
 
+/**
+ * Encapsula o resultado de uma partida de futsal.
+ * É transmitido por valor do servidor para o cliente.
+ */
 public class Resultados implements Serializable {
     private Time timeA;
     private Time timeB;
@@ -18,7 +22,7 @@ public class Resultados implements Serializable {
     public void exibirResultados(){
         System.out.println("Fim de jogo! Placar final: "
                 + timeA.getNome() + " " + golsA + " X "
-                + golsB + " " + timeA.getNome());
+                + golsB + " " + timeB.getNome());
     }
 
     public Time getTimeA() { return timeA; }

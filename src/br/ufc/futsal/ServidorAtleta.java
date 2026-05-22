@@ -7,7 +7,7 @@ import java.net.*;
 
 public class ServidorAtleta {
     public static void main(String[] args) {
-        System.out.println("[DEPRECATED] Este serviço TCP foi substituído por RMI.");
-        System.out.println("Inicie o servidor RMI: java -cp out br.ufc.futsal.rmi.ServidorRMI");
+        System.out.println("[LEGADO] Este serviço TCP foi substituído por RMI.");
+        System.out.println("Execute br.ufc.futsal.rmi.ServidorRMI para iniciar o servidor atual.");
     }
 }

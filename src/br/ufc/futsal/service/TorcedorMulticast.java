@@ -1,7 +1,6 @@
 package br.ufc.futsal.service;
 
 import br.ufc.futsal.rmi.RemoteListener;
-import br.ufc.futsal.rmi.RemoteListener;
 import br.ufc.futsal.rmi.FutsalServiceRemote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -22,11 +21,21 @@ public class TorcedorMulticast extends UnicastRemoteObject implements Runnable, 
             synchronized (this) { this.wait(); }
         } catch (Exception e) {
             System.err.println("Erro ao registrar listener RMI: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public void notify(String message) {
-        System.out.println("\n[AVISO DA LIGA]: " + message);
+        new Thread(() -> {
+            System.out.println("\n Notificação: " + message);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            System.out.print("\u001B[2K\r");
+            System.out.println();
+        }).start();
     }
 }

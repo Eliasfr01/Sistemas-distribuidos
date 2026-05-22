@@ -10,8 +10,9 @@ public class AdministradorService {
             Registry reg = LocateRegistry.getRegistry("localhost", 1099);
             FutsalServiceRemote serv = (FutsalServiceRemote) reg.lookup("FutsalService");
             serv.broadcast(mensagem);
-            System.out.println("Aviso enviado via RMI: " + mensagem);
+            System.out.println("✓ Notificação enviada aos clientes: " + mensagem);
         } catch (Exception e) {
+            System.err.println("Erro ao enviar notificação: " + e.getMessage());
             e.printStackTrace();
         }
     }

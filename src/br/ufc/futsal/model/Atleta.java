@@ -2,6 +2,10 @@ package br.ufc.futsal.model;
 
 import java.io.Serializable;
 
+/**
+ * Representa um atleta de futsal.
+ * Implementa Serializable para ser transmitido por valor via RMI.
+ */
 public class Atleta extends Pessoa implements Serializable{
     private int numeroCamisa;
     private String posicao;
